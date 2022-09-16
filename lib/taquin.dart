@@ -7,6 +7,15 @@ class Taquin {
   Taquin();
   //Constructeur pour créer un taquin fiable
   Taquin.create() {
+    _melangeRandom();
+    while (_isSolvable() != true) {
+      _melangeRandom();
+      print("mélange");
+    }
+  }
+
+  void _melangeRandom() {
+    _taquin = new List.generate(9, (index) => 0);
     for (int x = 0; x < _taquin.length - 1; x++) {
       //Nombre random entre 1 et 8
       int random = Random().nextInt(8) + 1;
@@ -16,6 +25,15 @@ class Taquin {
       this._taquin[x] = random;
     }
   }
+
+  bool _isSolvable() {
+    bool solvable = false;
+    if (_niveauDeMelance() % 2 == 0) {
+      solvable = true;
+    }
+    return solvable;
+  }
+
   void _incrementNombreDeCoups() {
     this._nombreDeCoups++;
   }
@@ -38,6 +56,26 @@ class Taquin {
       caseEgalZero = true;
     }
     return caseEgalZero;
+  }
+
+  int _niveauDeMelance() {
+    int niveau = 0;
+    int index = 0;
+    //Parcourir tout le tableau
+    //Pour chaque index on vérifie que les nombres derrière sont plus petits
+    //Sinon on incrémente le niveau
+    for (int x = 0; x < this._taquin.length; x++) {
+      int nombre = this._taquin[x];
+      if (nombre != 0) {
+        for (int y = x; y >= 0; y--) {
+          if (this._taquin[y] > nombre) {
+            //print(this._taquin[y].toString() + nombre.toString());
+            niveau++;
+          }
+        }
+      }
+    }
+    return niveau;
   }
 
   bool _estACoteDeZero(int index) {
@@ -104,7 +142,6 @@ class Taquin {
   void changeCase(int index) {
     if (_estACoteDeZero(index) && !estFini()) {
       int nombre = this._taquin[index];
-      print("index = " + index.toString());
       //On stocke le numéro à l'index définie
       int nombreReset = 0;
       //On stocke le nombre reset qui est de 0
@@ -112,14 +149,13 @@ class Taquin {
       for (int x = 0; x < this._taquin.length; x++) {
         if (this._taquin[x] == 0) {
           indexZero = x;
-          print(this._taquin);
         }
       }
-      print("index de zéro = " + indexZero.toString());
-      print("nombre = " + nombre.toString());
       this._taquin[index] = nombreReset;
       this._taquin[indexZero] = nombre;
       _incrementNombreDeCoups();
+      print(_niveauDeMelance());
+      print(_isSolvable());
     }
   }
 
@@ -136,6 +172,7 @@ class Taquin {
         this._taquin[8] == 0) {
       fini = true;
     }
+    print(_niveauDeMelance());
     return fini;
   }
 }

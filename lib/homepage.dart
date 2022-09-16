@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taquin/taquin.dart';
-import 'package:flutter/src/rendering/box.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -73,11 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         body: Column(children: [
-          if (_taquin.estFini()) Padding(padding: EdgeInsets.all(10)),
+          if (_taquin.estFini()) const Padding(padding: EdgeInsets.all(10)),
           if (_taquin.estFini())
-            Text("Bravo ! Vous avez gagné en " +
-                _taquin.getNombreDeCoups().toString() +
-                " mouvements"),
+            Text(
+                "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements"),
           if (_taquin.estFini())
             const Text("N'hésitez pas à relancer une partie, c'est gratuit"),
           if (!_taquin.estFini())
@@ -85,10 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  padding: EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(30),
                   child: Text(
-                    "Mouvements : " + _taquin.getNombreDeCoups().toString(),
-                    style: TextStyle(fontSize: 20),
+                    "Mouvements : ${_taquin.getNombreDeCoups().toString()}",
+                    style: const TextStyle(fontSize: 20),
                   ),
                 )
               ],
@@ -109,7 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: (() => _changeCase(index)),
                       child: Text(
                         (_sendTextTaquin(index)),
-                        style: TextStyle(color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       )));
             }),
           ))
