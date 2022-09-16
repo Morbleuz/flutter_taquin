@@ -10,7 +10,6 @@ class Taquin {
     _melangeRandom();
     while (_isSolvable() != true) {
       _melangeRandom();
-      print("mélange");
     }
   }
 
