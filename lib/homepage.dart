@@ -101,14 +101,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: _choiceCouleur(index),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: TextButton(
-                      onPressed: (() => _changeCase(index)),
-                      child: Text(
-                        (_sendTextTaquin(index)),
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white),
-                      )));
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        )
+                      ]),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: TextButton(
+                        onPressed: (() => _changeCase(index)),
+                        child: Text(
+                          (_sendTextTaquin(index)),
+                          style: const TextStyle(
+                              fontSize: 30, color: Colors.white),
+                        )),
+                  ));
             }),
           ))
         ]));
