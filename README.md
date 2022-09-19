@@ -1,16 +1,45 @@
-# flutter_taquin
+# Le Taquin
 
-A new Flutter project.
+Projet réalisé au cours de ma deuxième année de BTS SIO. Le but étant de crée le jeu du Taquin en Flutter et Dart. 
+J'ai crée un algorithme pour que le jeu soit toujours solvable et rajouté un nombre de mouvement au jeu.
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+Le but du jeu est de replacé les nombres dans l'ordre en effectuant le moins de coups possible.
 
-A few resources to get you started if this is your first Flutter project:
+## Allons-y
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Dépendances
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Vous pouvez lancer ce jeu depuis n'importe quel OS du moment que vous avez Flutter d'installer sur vôtre ordinateur. 
+
+* Sinon suivre ce lien https://docs.flutter.dev/get-started/install
+
+### Exécution du programme
+
+* Cloner le dépôt
+```
+git clone https://github.com/Morbleuz/flutter_taquin
+```
+* Parcourir le fichier
+```
+cd ^/flutter_taquin
+```
+* Installation des paquets
+```
+flutter pub get
+```
+* Lancement du programme
+```
+flutter run
+```
+
+## Besoin d'aides ?
+
+https://github.com/Morbleuz/flutter_taquin/issues
+
+## Auteurs
+
+Laude Axel
+Profil Linkedin : https://fr.linkedin.com/in/axel-laude-b9620a228
+
