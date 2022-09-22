@@ -37,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_db.get(0) != null) {
       mouvements = _db.get(0);
     }
-    print(mouvements);
     return mouvements;
   }
 
@@ -75,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _taquin.changeCase(index);
       if (_taquin.estFini()) {
-        print("Envoie des mouvements");
         _envoyerMouvements(_taquin.getNombreDeCoups());
         _stopLeChrono();
         confetti.play();
@@ -116,10 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showStat(context) {
-    showDialog(
-        context: context,
-        builder: (context) => DialogStat(
-            mouvements: _lireMouvements(), supprimer: _supprimerMouvements));
+    showDialog(context: context, builder: (context) => DialogStat());
   }
 
   void _testFini() {
@@ -144,12 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   "Nouvelle partie",
                   style: TextStyle(color: Colors.white),
                 )),
-            TextButton(
+            /*TextButton(
                 onPressed: _testFini,
                 child: const Text(
                   "Test fini",
                   style: TextStyle(color: Colors.white),
-                )),
+                )),*/
             IconButton(
                 onPressed: () => _showStat(context),
                 icon: const Icon(Icons.display_settings)),

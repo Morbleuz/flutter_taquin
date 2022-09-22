@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class DialogStat extends StatelessWidget {
-  final List<int> mouvements;
-  VoidCallback supprimer;
+  var mouvements;
+  final _db = Hive.box('taquin');
 
   int _calculMouvement() {
     double moyenne = 0;
-    int somme = 0;
-    int nombre = 0;
-    for (int mouvement in mouvements) {
-      somme += mouvement;
-      nombre++;
+    mouvements = _db.get(0);
+
+    if (mouvements != null) {
+      int somme = 0;
+      int nombre = 0;
+      for (int mouvement in mouvements) {
+        somme += mouvement;
+        nombre++;
+      }
+      moyenne = somme / nombre;
     }
-    moyenne = somme / nombre;
-    print(moyenne);
     return moyenne.round();
   }
 
-  DialogStat({super.key, required this.mouvements, required this.supprimer});
+  void supprimer() {
+    this.mouvements = [0];
+    _db.put(0, this.mouvements);
+    _calculMouvement();
+  }
+
+  DialogStat({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +42,7 @@ class DialogStat extends StatelessWidget {
               Text(
                 'Vôtre moyenne de mouvements est ${_calculMouvement()}',
               ),
-              Padding(padding: EdgeInsets.all(10)),
+              const Padding(padding: EdgeInsets.all(10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
