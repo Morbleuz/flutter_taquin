@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taquin/alertdialogue.dart';
 import 'package:flutter_taquin/taquin.dart';
@@ -15,6 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color couleur = Colors.indigo;
   int _seconds = 0;
   bool _chronoLancer = false;
+  final confetti = ConfettiController();
   final _db = Hive.box('taquin');
 
   void _envoyerMouvements(int mouvements) {
@@ -74,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Envoie des mouvements");
         _envoyerMouvements(_taquin.getNombreDeCoups());
         _stopLeChrono();
+        confetti.play();
       }
       if (_taquin.getNombreDeCoups() >= 1) {
         _lancerLeChrono();
@@ -120,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _testFini() {
     setState(() {
       _changeCase(0);
+      confetti.play();
       _taquin.testFini();
     });
   }
@@ -151,38 +157,61 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(children: [
           if (_taquin.estFini())
-            Column(
+            Stack(
+              alignment: Alignment.topRight,
               children: [
-                const Padding(padding: EdgeInsets.all(10)),
-                Text(
-                    "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements."),
-                Text(
-                  "Et en $_seconds secondes.",
-                ),
-                const Text(
-                    "N'hésitez pas à relancer une partie, c'est gratuit"),
+                Container(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    height: 200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ConfettiWidget(
+                          confettiController: confetti,
+                          blastDirection: pi / 2,
+                        ),
+                        const Text(
+                          "Bravo ! 🥳 ",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          "Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements.",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        Text(
+                          "Et en seulement $_seconds secondes.",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        const Text(
+                            "N'hésitez pas à relancer une partie, c'est gratuit",
+                            style: TextStyle(fontSize: 15)),
+                      ],
+                    ))
               ],
             )
           else
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Text(
-                    "Mouvements : ${_taquin.getNombreDeCoups().toString()}",
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Text(
-                    "$_seconds",
-                    style: const TextStyle(fontSize: 40, fontFamily: 'Alarm'),
-                  ),
-                ),
-              ],
-            ),
+            Container(
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(30),
+                      child: Text(
+                        "Mouvements : ${_taquin.getNombreDeCoups().toString()}",
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(30),
+                      child: Text(
+                        "$_seconds",
+                        style:
+                            const TextStyle(fontSize: 40, fontFamily: 'Alarm'),
+                      ),
+                    ),
+                  ],
+                )),
           Expanded(
               child: GridView(
             padding: const EdgeInsets.all(20),
