@@ -1,7 +1,8 @@
 # Le Taquin
 
-Projet réalisé au cours de ma deuxième année de BTS SIO. Le but étant de crée le jeu du Taquin en Flutter et Dart. 
-J'ai crée un algorithme pour que le jeu soit toujours solvable et rajouté un nombre de mouvement au jeu.
+Projet réalisé au cours de ma deuxième année de BTS SIO. Le but étant de crée le jeu du Taquin en Flutter et Dart.  
+  
+J'ai crée un algorithme pour que le jeu soit toujours solvable et rajouté un nombre de mouvement au jeu.  
 
 ## Description
 
