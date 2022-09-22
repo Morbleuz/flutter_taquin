@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class DialogStat extends StatelessWidget {
   final List<int> mouvements;
+  VoidCallback supprimer;
 
   int _calculMouvement() {
     double moyenne = 0;
@@ -16,7 +17,7 @@ class DialogStat extends StatelessWidget {
     return moyenne.round();
   }
 
-  DialogStat({super.key, required this.mouvements});
+  DialogStat({super.key, required this.mouvements, required this.supprimer});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +30,26 @@ class DialogStat extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  'Vôtre pourcentage de mouvements est de ${_calculMouvement()}'),
-              MaterialButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  color: Colors.indigo,
-                  child: const Text('Retour'))
+                'Vôtre moyenne de mouvements est ${_calculMouvement()}',
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MaterialButton(
+                      onPressed: () => supprimer,
+                      color: Colors.indigo,
+                      child: const Text(
+                        'Reset',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  MaterialButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      color: Colors.indigo,
+                      child: const Text('Retour',
+                          style: TextStyle(color: Colors.white)))
+                ],
+              )
             ],
           ),
         ));

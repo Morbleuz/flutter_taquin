@@ -37,16 +37,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return mouvements;
   }
 
-  void _supprimerMouvements() {}
+  void _supprimerMouvements() {
+    _db.delete(0);
+    _lireMouvements();
+  }
 
   void _chrono() async {
     while (_chronoLancer) {
       _chronoLancer = true;
       await Future.delayed(Duration(seconds: 1));
-      if (_seconds < 60) {
+      if (!_taquin.estFini()) {
         _seconds++;
-      } else {
-        _seconds = 0;
       }
       setState(() {});
     }
@@ -58,8 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _lancerLeChrono() {
-    _chronoLancer = true;
-    _chrono();
+    if (!_chronoLancer) {
+      _chronoLancer = true;
+      _chrono();
+    }
+
     setState(() {});
   }
 
@@ -71,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _envoyerMouvements(_taquin.getNombreDeCoups());
         _stopLeChrono();
       }
-      if (_taquin.getNombreDeCoups() > 1) {
+      if (_taquin.getNombreDeCoups() >= 1) {
         _lancerLeChrono();
       }
     });
@@ -79,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _nouvellePartie() {
     setState(() {
+      _chronoLancer = false;
+      _seconds = 0;
       _taquin = Taquin.create();
     });
   }
@@ -107,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showStat(context) {
     showDialog(
         context: context,
-        builder: (context) => DialogStat(mouvements: _lireMouvements()));
+        builder: (context) => DialogStat(
+            mouvements: _lireMouvements(), supprimer: _supprimerMouvements));
   }
 
   void _testFini() {
@@ -144,16 +151,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(children: [
           if (_taquin.estFini())
-            Container(
-              child: Column(
-                children: [
-                  const Padding(padding: EdgeInsets.all(10)),
-                  Text(
-                      "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements"),
-                  const Text(
-                      "N'hésitez pas à relancer une partie, c'est gratuit"),
-                ],
-              ),
+            Column(
+              children: [
+                const Padding(padding: EdgeInsets.all(10)),
+                Text(
+                    "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements."),
+                Text(
+                  "Et en $_seconds secondes.",
+                ),
+                const Text(
+                    "N'hésitez pas à relancer une partie, c'est gratuit"),
+              ],
             )
           else
             Column(
@@ -170,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(30),
                   child: Text(
                     "$_seconds",
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 40, fontFamily: 'Alarm'),
                   ),
                 ),
               ],
