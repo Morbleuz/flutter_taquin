@@ -1,12 +1,16 @@
 # Le Taquin
 
 Projet réalisé au cours de ma deuxième année de BTS SIO. Le but étant de crée le jeu du Taquin en Flutter et Dart.  
-  
-J'ai crée un algorithme pour que le jeu soit toujours solvable et rajouté un nombre de mouvement au jeu.  
 
 ## Description
 
-Le but du jeu est de replacé les nombres dans l'ordre en effectuant le moins de coups possible.
+Le but du jeu est de replacé les nombres dans l'ordre en effectuant le moins de coups possible.  
+  
+J'ai crée un algorithme pour que le jeu soit toujours solvable et rajouté un nombre de mouvement au jeu.  
+
+J'ai rajouté un packet pour stocker la moyenne de mouvements (Hive).  
+
+Mais égalemment un package pour que des confettis apparaissent lors de la victoire.  
 
 ## Allons-y
 
