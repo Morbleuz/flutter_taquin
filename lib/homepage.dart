@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_taquin/alertdialogue.dart';
 import 'package:flutter_taquin/taquin.dart';
+import 'package:hive/hive.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,9 +13,67 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Taquin _taquin = Taquin.create();
   Color couleur = Colors.indigo;
+  int _seconds = 0;
+  bool _chronoLancer = false;
+  final _db = Hive.box('taquin');
+
+  void _envoyerMouvements(int mouvements) {
+    if (_db.get(0) == null) {
+      List<int> listMouvement = [mouvements];
+      _db.put(0, listMouvement);
+    } else {
+      List<int> listMouvements = _db.get(0);
+      listMouvements.add(mouvements);
+      _db.put(0, listMouvements);
+    }
+  }
+
+  List<int> _lireMouvements() {
+    List<int> mouvements = [0];
+    if (_db.get(0) != null) {
+      mouvements = _db.get(0);
+    }
+    print(mouvements);
+    return mouvements;
+  }
+
+  void _supprimerMouvements() {}
+
+  void _chrono() async {
+    while (_chronoLancer) {
+      _chronoLancer = true;
+      await Future.delayed(Duration(seconds: 1));
+      if (_seconds < 60) {
+        _seconds++;
+      } else {
+        _seconds = 0;
+      }
+      setState(() {});
+    }
+  }
+
+  void _stopLeChrono() {
+    _chronoLancer = false;
+    setState(() {});
+  }
+
+  void _lancerLeChrono() {
+    _chronoLancer = true;
+    _chrono();
+    setState(() {});
+  }
+
   void _changeCase(index) {
     setState(() {
       _taquin.changeCase(index);
+      if (_taquin.estFini()) {
+        print("Envoie des mouvements");
+        _envoyerMouvements(_taquin.getNombreDeCoups());
+        _stopLeChrono();
+      }
+      if (_taquin.getNombreDeCoups() > 1) {
+        _lancerLeChrono();
+      }
     });
   }
 
@@ -34,12 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return couleur;
   }
 
-  void _fini() {
-    setState(() {
-      _taquin.testFini();
-    });
-  }
-
   String _sendTextTaquin(int index) {
     String text = "";
     setState(() {
@@ -50,11 +104,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return text;
   }
 
+  void _showStat(context) {
+    showDialog(
+        context: context,
+        builder: (context) => DialogStat(mouvements: _lireMouvements()));
+  }
+
+  void _testFini() {
+    setState(() {
+      _changeCase(0);
+      _taquin.testFini();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Taquin"),
+          title: const Text(
+            "Taquin",
+          ),
           actions: [
             TextButton(
                 onPressed: _nouvellePartie,
@@ -63,22 +132,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(color: Colors.white),
                 )),
             TextButton(
-                onPressed: _fini,
+                onPressed: _testFini,
                 child: const Text(
                   "Test fini",
                   style: TextStyle(color: Colors.white),
                 )),
+            IconButton(
+                onPressed: () => _showStat(context),
+                icon: const Icon(Icons.display_settings)),
           ],
         ),
         body: Column(children: [
-          if (_taquin.estFini()) const Padding(padding: EdgeInsets.all(10)),
           if (_taquin.estFini())
-            Text(
-                "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements"),
-          if (_taquin.estFini())
-            const Text("N'hésitez pas à relancer une partie, c'est gratuit"),
-          if (!_taquin.estFini())
-            Row(
+            Container(
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.all(10)),
+                  Text(
+                      "Bravo ! Vous avez gagné en ${_taquin.getNombreDeCoups()} mouvements"),
+                  const Text(
+                      "N'hésitez pas à relancer une partie, c'est gratuit"),
+                ],
+              ),
+            )
+          else
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
@@ -87,7 +165,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     "Mouvements : ${_taquin.getNombreDeCoups().toString()}",
                     style: const TextStyle(fontSize: 20),
                   ),
-                )
+                ),
+                Container(
+                  padding: const EdgeInsets.all(30),
+                  child: Text(
+                    "$_seconds",
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
               ],
             ),
           Expanded(

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taquin/taquin.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'homepage.dart';
 
 Future<void> main() async {
+  //init du hive
+  await Hive.initFlutter();
+  //open de la box
+  var box = await Hive.openBox('taquin');
   runApp(const MyApp());
 }
 

@@ -1,10 +1,13 @@
 import 'dart:math';
 
+import 'package:hive/hive.dart';
+
 class Taquin {
   List<int> _taquin = new List.generate(9, (index) => 0);
   int _nombreDeCoups = 0;
-
+  int seconds = 0;
   Taquin();
+
   //Constructeur pour créer un taquin fiable
   Taquin.create() {
     _melangeRandom();
